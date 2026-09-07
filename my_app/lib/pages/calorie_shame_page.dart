@@ -51,7 +51,7 @@ class CalorieShamePage extends StatelessWidget {
                       style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      'พลังงานสะสมประมาณ ~$totalCalories kcal! (ไม่อ้วนแน่นะวิ?)',
+                      'พลังงานสะสมประมาณ ~$totalCalories kcal! ${_calorieShameMessage(totalCalories)}',
                       style: const TextStyle(color: Colors.red),
                     ),
                   ],
@@ -108,5 +108,14 @@ class CalorieShamePage extends StatelessWidget {
         },
       ),
     );
+  }
+
+  // ข้อความแซวตามช่วงแคลอรี่สะสม
+  String _calorieShameMessage(int totalCalories) {
+    if (totalCalories < 1000) return 'กินน้อยไปไหน';
+    if (totalCalories < 3000) return 'ไม่อ้วนแน่นะวิ?';
+    if (totalCalories < 6000) return 'กินเยอะแล้ว หันไปออกกำลังบ้าง';
+    if (totalCalories < 10000) return 'อันนี้เกินโปรแล้วเห้ย! ';
+    return 'สรุปมันคือแอปไรกันแน่วะเนีย';
   }
 }
