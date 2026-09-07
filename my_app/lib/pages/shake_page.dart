@@ -80,11 +80,8 @@ class _ShakePageState extends State<ShakePage> {
 
     setState(() {
       isSaving = true;
-      statusMessage = "ภาพหน้าคนหิว & หาร้านใกล้ตัว...";
+      statusMessage = "หาร้านใกล้ตัว & ภาพหน้าคนหิว...";
     });
-
-    // ถ่ายภาพทันทีหลังเขย่า (ก่อนเลือกที่กิน)
-    final photoPath = await _capturePhoto();
 
     double lat = 13.7563;
     double lng = 100.5018;
@@ -192,6 +189,7 @@ class _ShakePageState extends State<ShakePage> {
     }
 
     setState(() => statusMessage = "กำลังบันทึกข้อมูล...");
+    final photoPath = await _capturePhoto();
     await _saveMeal(chosen.lat, chosen.lng, chosen.name, photoPath);
   }
 
