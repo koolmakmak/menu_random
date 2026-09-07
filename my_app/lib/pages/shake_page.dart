@@ -1,10 +1,12 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:path_provider/path_provider.dart';
 import '../main.dart';
 import '../services/nearby_places_service.dart';
 import 'calorie_shame_page.dart';
@@ -169,7 +171,35 @@ class _ShakePageState extends State<ShakePage> {
     }
 
     setState(() => statusMessage = "กำลังบันทึกข้อมูล...");
-    await _saveMeal(chosen.lat, chosen.lng, chosen.name);
+    final photoPath = await _capturePhoto();
+    await _saveMeal(chosen.lat, chosen.lng, chosen.name, photoPath);
+  }
+
+  // ประเมินแคลอรี่จากชื่อเมนู (TheMealDB ไม่มีข้อมูลแคลอรี่จริง)
+  int _estimateCalories(String mealName) {
+    int sum = 0;
+    for (final code in mealName.runes) {
+      sum += code;
+    }
+    // ได้ค่าเสถียรต่อเมนู อยู่ในช่วง ~350-950 kcal
+    return 350 + (sum % 600);
+  }
+
+  // ถ่ายภาพจานว่างตอนเขย่า แล้วบันทึกไว้ในเครื่อง
+  Future<String?> _capturePhoto() async {
+    try {
+      if (cameraController != null && cameraController!.value.isInitialized) {
+        final XFile file = await cameraController!.takePicture();
+        final dir = await getApplicationDocumentsDirectory();
+        final fileName = '${DateTime.now().millisecondsSinceEpoch}.jpg';
+        final destPath = '${dir.path}/$fileName';
+        await File(file.path).copy(destPath);
+        return destPath;
+      }
+    } catch (e) {
+      debugPrint("Capture photo error: $e");
+    }
+    return null;
   }
 
   // แสดงรายชื่อร้านจริงให้เลือก
@@ -252,7 +282,7 @@ class _ShakePageState extends State<ShakePage> {
   }
 
   // บันทึกเมนู + ร้านลง Firestore แล้วไปหน้า Calorie Shame
-  Future<void> _saveMeal(double lat, double lng, String shopName) async {
+  Future<void> _saveMeal(double lat, double lng, String shopName, String? photoPath) async {
     setState(() => statusMessage = "กำลังบันทึกข้อมูล...");
     try {
       User? user = FirebaseAuth.instance.currentUser;
@@ -266,8 +296,9 @@ class _ShakePageState extends State<ShakePage> {
           'shopName': shopName,
           'latitude': lat,
           'longitude': lng,
+          'photoPath': photoPath,
           'timestamp': FieldValue.serverTimestamp(),
-          'calories': 650,
+          'calories': _estimateCalories(widget.mealName),
         }).timeout(const Duration(seconds: 3));
       }
     } catch (e) {
