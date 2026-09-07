@@ -12,14 +12,38 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _confirmController = TextEditingController();
   bool isLoading = false;
 
-  // 1. ล็อกอินด้วย Email & Password
+  // 1. ตรวจสอบข้อกำหนดของ Email + Password
+  String? _validateInput() {
+    final email = _emailController.text.trim();
+    final pass = _passwordController.text;
+    final confirm = _confirmController.text;
+
+    if (email.isEmpty || pass.isEmpty) {
+      return 'กรุณากรอก Email และ Password';
+    }
+    if (!email.contains('@') || !email.contains('.')) {
+      return 'กรุณากรอก Email ให้ถูกต้อง';
+    }
+    if (pass.length < 6) {
+      return 'รหัสผ่านต้องยาวอย่างน้อย 6 ตัวอักษร';
+    }
+    if (!RegExp(r'[A-Za-z]').hasMatch(pass) || !RegExp(r'[0-9]').hasMatch(pass)) {
+      return 'รหัสผ่านต้องมีทั้งตัวอักษรและตัวเลข';
+    }
+    if (pass != confirm) {
+      return 'รหัสผ่านทั้งสองช่องไม่ตรงกัน';
+    }
+    return null;
+  }
+
+  // 2. ล็อกอินด้วย Email & Password
   Future<void> loginWithEmail() async {
-    if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('กรุณากรอก Email และ Password')),
-      );
+    String? err = _validateInput();
+    if (err != null) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(err)));
       return;
     }
 
@@ -130,6 +154,20 @@ class _LoginPageState extends State<LoginPage> {
                   labelText: 'Password',
                   border: OutlineInputBorder(),
                   prefixIcon: Icon(Icons.lock),
+                  filled: true,
+                  fillColor: Colors.white,
+                ),
+              ),
+              const SizedBox(height: 12),
+
+              // ช่องยืนยัน Password
+              TextField(
+                controller: _confirmController,
+                obscureText: true,
+                decoration: const InputDecoration(
+                  labelText: 'Confirm Password',
+                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.lock_outline),
                   filled: true,
                   fillColor: Colors.white,
                 ),
