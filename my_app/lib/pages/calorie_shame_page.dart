@@ -67,13 +67,16 @@ class CalorieShamePage extends StatelessWidget {
 
                     return ListTile(
                       leading: hasPhoto
-                          ? ClipRRect(
-                              borderRadius: BorderRadius.circular(8),
-                              child: Image.file(
-                                File(photoPath),
-                                width: 56,
-                                height: 56,
-                                fit: BoxFit.cover,
+                          ? GestureDetector(
+                              onTap: () => _showPhotoPreview(context, photoPath!),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(8),
+                                child: Image.file(
+                                  File(photoPath),
+                                  width: 56,
+                                  height: 56,
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                             )
                           : const Icon(Icons.fastfood, color: Colors.deepOrange),
@@ -106,6 +109,27 @@ class CalorieShamePage extends StatelessWidget {
             ],
           );
         },
+      ),
+    );
+  }
+
+  // เปิดดูรูปเต็มจอ (ซูมได้)
+  void _showPhotoPreview(BuildContext context, String path) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => Scaffold(
+          backgroundColor: Colors.black,
+          appBar: AppBar(
+            backgroundColor: Colors.black,
+            iconTheme: const IconThemeData(color: Colors.white),
+          ),
+          body: Center(
+            child: InteractiveViewer(
+              child: Image.file(File(path)),
+            ),
+          ),
+        ),
       ),
     );
   }
