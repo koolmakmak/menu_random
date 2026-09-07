@@ -1,36 +1,26 @@
 {
   "project_info": {
-    "project_number": "316850270153",
-    "project_id": "menu-random-bf9ef",
-    "storage_bucket": "menu-random-bf9ef.firebasestorage.app"
+    "project_number": "842950010320",
+    "project_id": "cheapshaker",
+    "storage_bucket": "cheapshaker.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:316850270153:android:8f17de56227c41657c4218",
+        "mobilesdk_app_id": "1:842950010320:android:059c7d2308929e982cc5d5",
         "android_client_info": {
           "package_name": "com.example.my_app"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "316850270153-bldq3clo4sjmonc6k0kgnc90f12956os.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDWWlM1DONCgAs-EKcpPInWlgJUoxgomt8"
+          "current_key": "AIzaSyCPBO5enSwBR6CgAN4Hd__3I5ripo1PptU"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "316850270153-bldq3clo4sjmonc6k0kgnc90f12956os.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }

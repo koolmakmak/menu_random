@@ -41,50 +41,44 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyBV1-cq5LiStsx1ldxjX44qa5RUWhr36FI',
-    appId: '1:316850270153:web:c6afd695164ed8c47c4218',
-    messagingSenderId: '316850270153',
-    projectId: 'menu-random-bf9ef',
-    authDomain: 'menu-random-bf9ef.firebaseapp.com',
-    storageBucket: 'menu-random-bf9ef.firebasestorage.app',
-    measurementId: 'G-DEKE9JVJ29',
+    apiKey: 'AIzaSyC0BCW3FEwKmOt6C0IWOAHIg0vf6Ph5Tvo',
+    appId: '1:842950010320:web:0be8ec72c86567b82cc5d5',
+    messagingSenderId: '842950010320',
+    projectId: 'cheapshaker',
+    authDomain: 'cheapshaker.firebaseapp.com',
+    storageBucket: 'cheapshaker.firebasestorage.app',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDWWlM1DONCgAs-EKcpPInWlgJUoxgomt8',
-    appId: '1:316850270153:android:8f17de56227c41657c4218',
-    messagingSenderId: '316850270153',
-    projectId: 'menu-random-bf9ef',
-    storageBucket: 'menu-random-bf9ef.firebasestorage.app',
+    apiKey: 'AIzaSyCPBO5enSwBR6CgAN4Hd__3I5ripo1PptU',
+    appId: '1:842950010320:android:059c7d2308929e982cc5d5',
+    messagingSenderId: '842950010320',
+    projectId: 'cheapshaker',
+    storageBucket: 'cheapshaker.firebasestorage.app',
   );
-
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyC3xye5ldF6ca-9gqBzbK48Y7UVEbxRLX4',
-    appId: '1:316850270153:ios:2042d2d3f23d3f7c7c4218',
-    messagingSenderId: '316850270153',
-    projectId: 'menu-random-bf9ef',
-    storageBucket: 'menu-random-bf9ef.firebasestorage.app',
-    iosClientId: '316850270153-brjdu7ih3s3t0ldnib7heqir8bs89jfi.apps.googleusercontent.com',
+    apiKey: 'AIzaSyCQEDbeEeSaggKorlhq8qfbHyWlOk-PblI',
+    appId: '1:842950010320:ios:34958b1abd91a0ae2cc5d5',
+    messagingSenderId: '842950010320',
+    projectId: 'cheapshaker',
+    storageBucket: 'cheapshaker.firebasestorage.app',
     iosBundleId: 'com.example.myApp',
   );
-
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyC3xye5ldF6ca-9gqBzbK48Y7UVEbxRLX4',
-    appId: '1:316850270153:ios:2042d2d3f23d3f7c7c4218',
-    messagingSenderId: '316850270153',
-    projectId: 'menu-random-bf9ef',
-    storageBucket: 'menu-random-bf9ef.firebasestorage.app',
-    iosClientId: '316850270153-brjdu7ih3s3t0ldnib7heqir8bs89jfi.apps.googleusercontent.com',
+    apiKey: 'AIzaSyCQEDbeEeSaggKorlhq8qfbHyWlOk-PblI',
+    appId: '1:842950010320:ios:34958b1abd91a0ae2cc5d5',
+    messagingSenderId: '842950010320',
+    projectId: 'cheapshaker',
+    storageBucket: 'cheapshaker.firebasestorage.app',
     iosBundleId: 'com.example.myApp',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyBV1-cq5LiStsx1ldxjX44qa5RUWhr36FI',
-    appId: '1:316850270153:web:066c2bb13faf1f687c4218',
-    messagingSenderId: '316850270153',
-    projectId: 'menu-random-bf9ef',
-    authDomain: 'menu-random-bf9ef.firebaseapp.com',
-    storageBucket: 'menu-random-bf9ef.firebasestorage.app',
-    measurementId: 'G-HEWZXFM5LH',
+    apiKey: 'AIzaSyC0BCW3FEwKmOt6C0IWOAHIg0vf6Ph5Tvo',
+    appId: '1:842950010320:web:f01a3381ba84e6792cc5d5',
+    messagingSenderId: '842950010320',
+    projectId: 'cheapshaker',
+    authDomain: 'cheapshaker.firebaseapp.com',
+    storageBucket: 'cheapshaker.firebasestorage.app',
   );
 }
