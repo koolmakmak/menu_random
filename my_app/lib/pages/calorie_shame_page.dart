@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -32,7 +33,10 @@ class CalorieShamePage extends StatelessWidget {
           }
 
           var docs = snapshot.data!.docs;
-          int totalCalories = docs.length * 650;
+          int totalCalories = docs.fold(0, (total, doc) {
+            int cal = (doc.data() as Map<String, dynamic>)['calories'] as int? ?? 0;
+            return total + cal;
+          });
 
           return Column(
             children: [
@@ -58,15 +62,30 @@ class CalorieShamePage extends StatelessWidget {
                   itemCount: docs.length,
                   itemBuilder: (context, index) {
                     var data = docs[index].data() as Map<String, dynamic>;
+                    String? photoPath = data['photoPath'];
+                    bool hasPhoto = photoPath != null && File(photoPath).existsSync();
+
                     return ListTile(
-                      leading: const Icon(Icons.fastfood, color: Colors.deepOrange),
+                      leading: hasPhoto
+                          ? ClipRRect(
+                              borderRadius: BorderRadius.circular(8),
+                              child: Image.file(
+                                File(photoPath),
+                                width: 56,
+                                height: 56,
+                                fit: BoxFit.cover,
+                              ),
+                            )
+                          : const Icon(Icons.fastfood, color: Colors.deepOrange),
                       title: Text(data['mealName'] ?? 'ไม่ทราบชื่อเมนู'),
                       subtitle: Text(
-                        'Lat: ${data['latitude']?.toStringAsFixed(2)}, Long: ${data['longitude']?.toStringAsFixed(2)}',
+                        data['shopName'] != null && (data['shopName'] as String).isNotEmpty
+                            ? '📍 ${data['shopName']}'
+                            : '📍 ไม่ระบุร้าน',
                       ),
-                      trailing: const Text(
-                        '+650 kcal',
-                        style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+                      trailing: Text(
+                        '+${data['calories'] ?? 0} kcal',
+                        style: const TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
                       ),
                     );
                   },

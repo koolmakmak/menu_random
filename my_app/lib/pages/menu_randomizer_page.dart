@@ -1,6 +1,9 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:firebase_auth/firebase_auth.dart';
+import 'calorie_shame_page.dart';
+import 'login_page.dart';
 import 'shake_page.dart';
 
 class MenuRandomizerPage extends StatefulWidget {
@@ -44,6 +47,32 @@ class _MenuRandomizerPageState extends State<MenuRandomizerPage> {
         title: const Text('เมนูตามดวงชะตา'),
         backgroundColor: Colors.deepOrange,
         foregroundColor: Colors.white,
+        actions: [
+          IconButton(
+            tooltip: 'ประวัติ',
+            icon: const Icon(Icons.history),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const CalorieShamePage()),
+              );
+            },
+          ),
+          IconButton(
+            tooltip: 'ออกจากระบบ',
+            icon: const Icon(Icons.logout),
+            onPressed: () async {
+              await FirebaseAuth.instance.signOut();
+              if (context.mounted) {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => const LoginPage()),
+                  (route) => false,
+                );
+              }
+            },
+          ),
+        ],
       ),
       body: Center(
         child: isLoading
