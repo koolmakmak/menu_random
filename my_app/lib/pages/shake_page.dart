@@ -24,6 +24,7 @@ class _ShakePageState extends State<ShakePage> {
   StreamSubscription<AccelerometerEvent>? _accelSubscription;
   String statusMessage = "เขย่าเครื่องแรงๆ เพื่อสุ่มหาร้าน!";
   bool isSaving = false;
+  int _cameraIndex = 0;
 
   @override
   void initState() {
@@ -34,10 +35,27 @@ class _ShakePageState extends State<ShakePage> {
 
   void _initCamera() async {
     if (cameras.isNotEmpty) {
-      cameraController = CameraController(cameras[0], ResolutionPreset.medium);
+      // ตั้งค่าเริ่มต้นเป็นกล้องหน้า
+      int frontIdx = cameras.indexWhere((c) => c.lensDirection == CameraLensDirection.front);
+      _cameraIndex = frontIdx >= 0 ? frontIdx : 0;
+      cameraController = CameraController(cameras[_cameraIndex], ResolutionPreset.medium);
       await cameraController?.initialize();
       if (mounted) setState(() {});
     }
+  }
+
+  // สลับกล้องหน้า/หลัง
+  Future<void> _switchCamera() async {
+    if (cameras.length < 2 || isSaving) return;
+    await cameraController?.dispose();
+    _cameraIndex = (_cameraIndex + 1) % cameras.length;
+    cameraController = CameraController(cameras[_cameraIndex], ResolutionPreset.medium);
+    try {
+      await cameraController?.initialize();
+    } catch (e) {
+      debugPrint("Switch camera error: $e");
+    }
+    if (mounted) setState(() {});
   }
 
   void _listenAccelerometer() {
@@ -62,8 +80,11 @@ class _ShakePageState extends State<ShakePage> {
 
     setState(() {
       isSaving = true;
-      statusMessage = "กำลังหาร้านใกล้ตัว (Geoapify)...";
+      statusMessage = "ภาพหน้าคนหิว & หาร้านใกล้ตัว...";
     });
+
+    // ถ่ายภาพทันทีหลังเขย่า (ก่อนเลือกที่กิน)
+    final photoPath = await _capturePhoto();
 
     double lat = 13.7563;
     double lng = 100.5018;
@@ -171,7 +192,6 @@ class _ShakePageState extends State<ShakePage> {
     }
 
     setState(() => statusMessage = "กำลังบันทึกข้อมูล...");
-    final photoPath = await _capturePhoto();
     await _saveMeal(chosen.lat, chosen.lng, chosen.name, photoPath);
   }
 
@@ -324,7 +344,7 @@ class _ShakePageState extends State<ShakePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('ส่องจานว่าง & เขย่า'),
+        title: const Text('ส่องหน้าคนหิว & เขย่า'),
         backgroundColor: Colors.deepOrange,
         foregroundColor: Colors.white,
       ),
@@ -359,6 +379,14 @@ class _ShakePageState extends State<ShakePage> {
                       icon: const Icon(Icons.vibration),
                       label: const Text('จำลองการเขย่า (Simulate Shake)'),
                     ),
+                    if (cameras.length >= 2) ...[
+                      const SizedBox(height: 8),
+                      TextButton.icon(
+                        onPressed: isSaving ? null : _switchCamera,
+                        icon: const Icon(Icons.cameraswitch),
+                        label: const Text('สลับกล้องหน้า/หลัง'),
+                      ),
+                    ],
                   ],
                 ),
               ),
