@@ -31,8 +31,8 @@ class _LoginPageState extends State<LoginPage> {
       );
       _navigateToNextPage();
     } on FirebaseAuthException catch (e) {
-      // ถ้ายังไม่มีบัญชี ให้สมัครให้อัตโนมัติทันที
-      if (e.code == 'user-not-found') {
+      // ถ้าไม่มีบัญชีหรือข้อมูลผิด ให้สมัครอัตโนมัติ
+      if (e.code == 'user-not-found' || e.code == 'invalid-credential') {
         _registerUser();
       } else {
         _showError(e.message ?? 'เกิดข้อผิดพลาด');
@@ -50,6 +50,12 @@ class _LoginPageState extends State<LoginPage> {
         password: _passwordController.text.trim(),
       );
       _navigateToNextPage();
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'email-already-in-use') {
+        _showError('มีบัญชีนี้แล้ว กรุณากรอกรหัสผ่านให้ถูกต้อง');
+      } else {
+        _showError('สมัครสมาชิกไม่สำเร็จ: ${e.message}');
+      }
     } catch (e) {
       _showError('สมัครสมาชิกไม่สำเร็จ: $e');
     }
